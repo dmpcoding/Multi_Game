@@ -2,20 +2,60 @@
 
 void Menu::draw(sf::RenderTarget& target,sf::RenderStates states)const{
 
-	for(sf::Text x: menu_options)
-		target.draw(x,states);
+	if(run == menu)
+		for(sf::Text x: menu_options)
+			target.draw(x,states);
 
 }
 
 void  Menu::refresh(){
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)&&*isKeyPressed){ select_option--; }
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)&&*isKeyPressed){ select_option++; }
-	select_option = (select_option < 0)?2:select_option;
-	select_option = (select_option > 2)?0:select_option;
+	if(run == menu)
+		Display();
+	if(run == options)
+		Options();
+	if(run == single_player)
+		Game();
+
+
+}
+
+void Menu::Options(){
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)&&*isKeyPressed)
+		run = menu;
+
+}
+
+void Menu::Display(){
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)&&*isKeyPressed){ int i = int(select_option)-1; i = (i < 0)?2:i; select_option = (options_in_menu)i;}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)&&*isKeyPressed){ int i = int(select_option)+1; i = (i > 2)?0:i; select_option = (options_in_menu)i;}
+
 	for(int i = 0;i<3;i++)
 		menu_options[i].setFillColor(sf::Color::White);
-	menu_options[select_option].setFillColor(sf::Color::Cyan);
+	menu_options[(int)select_option].setFillColor(sf::Color::Cyan);
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return)&&*isKeyPressed){
+		switch(select_option){
+			case quit:
+			game_window->close();
+			break;
+			case single_player:
+			run = single_player;
+			break;
+			case options:
+			run = options;
+			break;
+		}
+	}
+
+}
+
+void Menu::Game(){
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)&&*isKeyPressed)
+		run = menu;
 
 }
 
@@ -34,7 +74,8 @@ Menu::Menu(sf::RenderWindow* window,bool* keyPressed){
 	menu_options[2].setString("Quit");
 	menu_options[2].setPosition((game_window->getSize().x-menu_options[2].getGlobalBounds().width)/2,menu_options[1].getPosition().y+menu_options[1].getGlobalBounds().height+10);
 
-	select_option = 0;
+	select_option = single_player;
 	isKeyPressed = keyPressed;
+	run = menu;
 
 }

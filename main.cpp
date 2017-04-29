@@ -18,8 +18,10 @@ int main(){
 
 				case sf::Event::Closed:
 					game_window.close();
+					break;
 				case sf::Event::KeyPressed:
 					isKeyPressed = true;
+					break;
 
 			}
 
