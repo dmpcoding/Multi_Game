@@ -1,11 +1,11 @@
-#include "menu.h"
+#include "libraries/menu.h"
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
 int main(){
 
 	sf::RenderWindow game_window(sf::VideoMode(500,500),"L_S");
-	
+
 	bool isKeyPressed = false;
 	Menu menu(&game_window,&isKeyPressed);
 
