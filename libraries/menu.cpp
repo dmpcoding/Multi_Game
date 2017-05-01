@@ -58,6 +58,7 @@ void Menu::Game(){
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)&&*isKeyPressed)
 		run = menu;
+	single.refresh();
 
 }
 

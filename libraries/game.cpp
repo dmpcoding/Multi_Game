@@ -10,9 +10,46 @@ void P_Game::draw(sf::RenderTarget& target,sf::RenderStates states)const{
 
 P_Game::P_Game(){
 
-    player.setRadius(20);
+    player.setRadius(10);
     player.setFillColor(sf::Color::Red);
 		player.setPosition(0,15);
+
+}
+
+void P_Game::refresh(){
+
+	sf::CircleShape test = player;
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+		test.move(0.1,0);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+		test.move(0,0.1);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+		test.move(-0.1,0);
+	}
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+		test.move(0,-0.1);
+	}
+
+	bool off_the_screen = (test.getPosition().x > 0 &&
+	test.getPosition().y > 0 && test.getPosition().x < 480
+  && test.getPosition().y < 480);
+
+	if(off_the_screen){
+
+		bool collision = false;
+
+			for(int i = 0;i < game_map.size()&&!collision;i++)
+				collision = game_map[i].getGlobalBounds().intersects(
+					test.getGlobalBounds());
+
+					if(collision == false){
+						player = test;
+					}
+	}
 
 }
 

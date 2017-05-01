@@ -24,6 +24,7 @@ public:
   void addMapElement(int x,int y,int w,int h,int r);
   void addMapElement(map_element_value values);
   void setUpMap(int i,int x,int y,int w,int h,int r);
+	void refresh();
 
 
 };
