@@ -79,11 +79,18 @@ Menu::Menu(sf::RenderWindow* window,bool* keyPressed){
 	select_option = single_player;
 	isKeyPressed = keyPressed;
 	run = menu;
-	single.addMapElement(10,10,50,10,0);
-	single.addMapElement(60,10,50,10,90);
-	single.addMapElement(60,50,40,10,0);
-	single.addMapElement(110,10,50,10,90);
-	single.addMapElement(110,10,50,10,0);
+	file.open("libraries/abc");
+	int x = 0;
+	file >> x;
 
+	for (int i = 0;i<x;i++){
+	 	file >> value.x;
+		file >> value.y;
+		file >> value.w;
+		file >> value.h;
+		file >> value.r;
+
+		single.addMapElement(value);
+	}
 
 }
