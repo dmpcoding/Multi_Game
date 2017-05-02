@@ -9,11 +9,10 @@
 
 class Menu: public sf::Drawable, public sf::Transformable{
 
-protected:
+private:
 	sf::Font font;
 	sf::RenderWindow* game_window;
 	bool* isKeyPressed;
-private:
 	enum options_in_menu{single_player=0,options,quit,menu};
 	options_in_menu select_option;
 	options_in_menu run;
@@ -24,6 +23,7 @@ private:
 	P_Game single;
 	std::ifstream file;
 	map_element_value value;
+	bool start_clock;
 
 public:
 	virtual void draw(sf::RenderTarget& target,sf::RenderStates states)const;

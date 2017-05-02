@@ -4,7 +4,15 @@ void P_Game::draw(sf::RenderTarget& target,sf::RenderStates states)const{
 	for(sf::RectangleShape x: game_map)
 		target.draw(x,states);
 
+	target.draw(meta,states);
 	target.draw(player,states);
+	sf::Time time = clock.getElapsedTime();
+	int m = time.asSeconds()/60;
+	int s = int(time.asSeconds())%60;
+	sf::Text textTime(std::to_string(m)+":"+std::to_string(s),*font,16);
+	textTime.setPosition(game_window->getSize().x-textTime.getGlobalBounds().width,
+	0);
+	target.draw(textTime,states);
 
 }
 
@@ -13,7 +21,13 @@ P_Game::P_Game(){
     player.setRadius(10);
     player.setFillColor(sf::Color::Red);
 		player.setPosition(0,15);
+		meta_texture.loadFromFile("x.png");
+		meta.setTexture(meta_texture);
 
+}
+
+void P_Game::resetClock(){
+		clock.restart();
 }
 
 void P_Game::refresh(){
@@ -34,9 +48,10 @@ void P_Game::refresh(){
 		test.move(0,-0.1);
 	}
 
-	bool off_the_screen = (test.getPosition().x > 0 &&
-	test.getPosition().y > 0 && test.getPosition().x < 480
-  && test.getPosition().y < 480);
+	bool off_the_screen = (test.getPosition().x > 0
+	&& test.getPosition().y > 0
+	&& test.getPosition().x < game_window->getSize().x-test.getGlobalBounds().width
+  && test.getPosition().y < game_window->getSize().y-test.getGlobalBounds().height);
 
 	if(off_the_screen){
 
@@ -73,5 +88,11 @@ void P_Game::addMapElement(int x,int y,int w,int h,int r){
 void P_Game::addMapElement(map_element_value values){
 
 	addMapElement(values.x,values.y,values.w,values.h,values.r);
+
+}
+
+void P_Game::setUpMapEnd(int x,int y){
+
+	meta.setPosition(x,y);
 
 }

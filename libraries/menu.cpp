@@ -45,6 +45,7 @@ void Menu::Display(){
 			break;
 			case single_player:
 			run = single_player;
+			start_clock = true;
 			break;
 			case options:
 			run = options;
@@ -56,6 +57,10 @@ void Menu::Display(){
 
 void Menu::Game(){
 
+	if(start_clock){
+		start_clock = false;
+		single.resetClock();
+	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)&&*isKeyPressed)
 		run = menu;
 	single.refresh();
@@ -65,6 +70,7 @@ void Menu::Game(){
 Menu::Menu(sf::RenderWindow* window,bool* keyPressed){
 
 	font.loadFromFile("font/Oxygen-Light.ttf");
+	single.setFont(&font);
 
 	for(int i = 0;i<3;i++)
 		menu_options[i].setFont(font);
@@ -81,10 +87,10 @@ Menu::Menu(sf::RenderWindow* window,bool* keyPressed){
 	isKeyPressed = keyPressed;
 	run = menu;
 	file.open("libraries/abc");
-	int x = 0;
-	file >> x;
+	int lines = 0;
+	file >> lines;
 
-	for (int i = 0;i<x;i++){
+	for (int i = 0;i<lines;i++){
 	 	file >> value.x;
 		file >> value.y;
 		file >> value.w;
@@ -92,6 +98,18 @@ Menu::Menu(sf::RenderWindow* window,bool* keyPressed){
 		file >> value.r;
 
 		single.addMapElement(value);
+
 	}
+
+	int x = 0;
+	int y = 0;
+
+	file >> x;
+	file >> y;
+
+	single.setUpMapEnd(x,y);
+	single.setRnderWindow(game_window);
+
+	start_clock = false;
 
 }
