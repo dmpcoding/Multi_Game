@@ -4,7 +4,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <array>
-#include <fstream>
 #include "game.h"
 
 class Menu: public sf::Drawable, public sf::Transformable{
@@ -21,8 +20,6 @@ private:
 	void Game();
 	void Options();
 	P_Game single;
-	std::ifstream file;
-	map_element_value value;
 	bool start_clock;
 
 public:

@@ -18,16 +18,19 @@ void P_Game::draw(sf::RenderTarget& target,sf::RenderStates states)const{
 
 P_Game::P_Game(){
 
+		readMapFromFile("libraries/abc");
     player.setRadius(10);
     player.setFillColor(sf::Color::Red);
 		player.setPosition(0,15);
 		meta_texture.loadFromFile("x.png");
 		meta.setTexture(meta_texture);
+		speed = 0.2;
 
 }
 
 void P_Game::resetClock(){
 		clock.restart();
+		player.setPosition(0,15);
 }
 
 void P_Game::refresh(){
@@ -35,17 +38,17 @@ void P_Game::refresh(){
 	sf::CircleShape test = player;
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-		test.move(0.1,0);
+		test.move(speed,0);
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-		test.move(0,0.1);
+		test.move(0,speed);
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-		test.move(-0.1,0);
+		test.move(-speed,0);
 	}
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-		test.move(0,-0.1);
+		test.move(0,-speed);
 	}
 
 	bool off_the_screen = (test.getPosition().x > 0
@@ -64,6 +67,12 @@ void P_Game::refresh(){
 					if(collision == false){
 						player = test;
 					}
+	}
+
+	sf::Rect<float> meta_test = meta.getGlobalBounds();
+	meta_test.left+= player.getGlobalBounds().width;
+	if(player.getGlobalBounds().intersects(meta_test)){
+		resetClock();
 	}
 
 }
@@ -94,5 +103,32 @@ void P_Game::addMapElement(map_element_value values){
 void P_Game::setUpMapEnd(int x,int y){
 
 	meta.setPosition(x,y);
+
+}
+
+void P_Game::readMapFromFile(std::string file){
+
+	map_file.open(file);
+	int lines = 0;
+	map_file >> lines;
+
+	for (int i = 0;i<lines;i++){
+		map_file >> value.x;
+		map_file >> value.y;
+		map_file >> value.w;
+		map_file >> value.h;
+		map_file >> value.r;
+
+		addMapElement(value);
+
+	}
+
+	int x = 0;
+	int y = 0;
+
+	map_file >> x;
+	map_file >> y;
+
+	setUpMapEnd(x,y);
 
 }

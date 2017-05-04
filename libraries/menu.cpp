@@ -86,28 +86,7 @@ Menu::Menu(sf::RenderWindow* window,bool* keyPressed){
 	select_option = single_player;
 	isKeyPressed = keyPressed;
 	run = menu;
-	file.open("libraries/abc");
-	int lines = 0;
-	file >> lines;
 
-	for (int i = 0;i<lines;i++){
-	 	file >> value.x;
-		file >> value.y;
-		file >> value.w;
-		file >> value.h;
-		file >> value.r;
-
-		single.addMapElement(value);
-
-	}
-
-	int x = 0;
-	int y = 0;
-
-	file >> x;
-	file >> y;
-
-	single.setUpMapEnd(x,y);
 	single.setRnderWindow(game_window);
 
 	start_clock = false;
