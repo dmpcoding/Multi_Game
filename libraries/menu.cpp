@@ -1,72 +1,87 @@
 #include "menu.h"
 
-void Menu::draw(sf::RenderTarget& target,sf::RenderStates states)const{
+void Menu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    if (run == menu) {
+        for (sf::Text x: menu_options) {
+            target.draw(x, states);
+        }
+    }
 
-	if(run == menu)
-		for(sf::Text x: menu_options)
-			target.draw(x,states);
-	if(run == single_player)
-		target.draw(single);
-
+    if (run == single_player) {
+        target.draw(single);
+    }
 }
 
-void  Menu::refresh(){
+void Menu::refresh() {
+    if (run == menu) {
+        Display();
+    }
 
-	if(run == menu)
-		Display();
-	if(run == options)
-		Options();
-	if(run == single_player)
-		Game();
+    if (run == options) {
+        Options();
+    }
 
-
+    if (run == single_player) {
+        Game();
+    }
 }
 
-void Menu::Options(){
-
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)&&*isKeyPressed)
-		run = menu;
-
+void Menu::Options() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && *isKeyPressed) {
+        run = menu;
+    }
 }
 
-void Menu::Display(){
+void Menu::Display() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && *isKeyPressed) {
+        int i = int(select_option) - 1;
+        i = (i < 0) ? 2 : i;
+        select_option = (options_in_menu)i;
+    }
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)&&*isKeyPressed){ int i = int(select_option)-1; i = (i < 0)?2:i; select_option = (options_in_menu)i;}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)&&*isKeyPressed){ int i = int(select_option)+1; i = (i > 2)?0:i; select_option = (options_in_menu)i;}
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && *isKeyPressed) {
+        int i = int(select_option) + 1;
+        i = (i > 2) ? 0 : i;
+        select_option = (options_in_menu)i;
+    }
 
-	for(int i = 0;i<3;i++)
-		menu_options[i].setFillColor(sf::Color::White);
-	menu_options[(int)select_option].setFillColor(sf::Color::Cyan);
+    for (int i = 0; i < 3; i++) {
+        menu_options[i].setFillColor(sf::Color::White);
+    }
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return)&&*isKeyPressed){
-		switch(select_option){
-			case quit:
-			game_window->close();
-			break;
-			case single_player:
-			run = single_player;
-			start_clock = true;
-			break;
-			case options:
-			run = options;
-			break;
-		}
-	}
+    menu_options[(int)select_option].setFillColor(sf::Color::Cyan);
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && *isKeyPressed) {
+        switch (select_option) {
+        case quit:
+            game_window->close();
+            break;
+        case single_player:
+            run = single_player;
+            start_clock = true;
+            break;
+        case options:
+            run = options;
+            break;
+        }
+    }
 }
 
-void Menu::Game(){
+void Menu::Game() {
+    if (start_clock) {
+        start_clock = false;
+        single.readMapFromFile("libraries/level_1");
+        single.resetClock(true);
+        single.resetClock();
+    }
 
-	if(start_clock){
-		start_clock = false;
-		single.readMapFromFile("libraries/level_1");
-		single.resetClock(true);
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)&&*isKeyPressed)
-		run = menu;
-	single.refresh();
-
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && *isKeyPressed) {
+        run = menu;
+    }
+    single.refresh();
+  
 }
+
 
 Menu::Menu(sf::RenderWindow* window,bool* keyPressed){
 

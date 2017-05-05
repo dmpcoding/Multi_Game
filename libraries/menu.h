@@ -2,12 +2,12 @@
 #define Menu_Class
 
 #include <iostream>
-#include <SFML/Graphics.hpp>
 #include <array>
+#include <fstream>
 #include "game.h"
+#include <SFML/Graphics.hpp>
 
-class Menu: public sf::Drawable, public sf::Transformable{
-
+class Menu : public sf::Drawable, public sf::Transformable {
 private:
 	sf::Font font;
 	sf::RenderWindow* game_window;
@@ -21,12 +21,12 @@ private:
 	void Options();
 	P_Game single;
 	bool start_clock;
+  map_element_value value;
 
 public:
-	virtual void draw(sf::RenderTarget& target,sf::RenderStates states)const;
-	void refresh();
-	Menu(sf::RenderWindow* window,bool* keyPressed);
-
+  Menu(sf::RenderWindow *window, bool *keyPressed);
+  virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+  void refresh();
 };
 
-#endif
+#endif // Menu_Class
