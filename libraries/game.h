@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <fstream>
+#include <iostream>
 
 struct map_element_value{
 	int x;
@@ -25,6 +26,9 @@ private:
 		std::ifstream map_file;
 		map_element_value value;
 		double speed;
+		std::vector<std::string> levels;
+		int actual_level;
+		int number_of_levels;
 
 
 public:
@@ -37,7 +41,7 @@ public:
 	void readMapFromFile(std::string file);
 	void refresh();
 	void setUpMapEnd(int x,int y);
-	void resetClock();
+	void resetClock(bool rest_levels);
 	void setFont(sf::Font *f){font = f;};
 	void nextLeve();
 

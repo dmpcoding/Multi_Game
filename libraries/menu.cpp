@@ -59,7 +59,8 @@ void Menu::Game(){
 
 	if(start_clock){
 		start_clock = false;
-		single.resetClock();
+		single.readMapFromFile("libraries/level_1");
+		single.resetClock(true);
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)&&*isKeyPressed)
 		run = menu;
