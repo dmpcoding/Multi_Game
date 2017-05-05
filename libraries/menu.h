@@ -4,27 +4,24 @@
 #include <iostream>
 #include <array>
 #include <fstream>
-
-#include <SFML/Graphics.hpp>
-
 #include "game.h"
+#include <SFML/Graphics.hpp>
 
 class Menu : public sf::Drawable, public sf::Transformable {
 private:
-  sf::Font font;
-  sf::RenderWindow *game_window;
-  bool *isKeyPressed;
-  enum options_in_menu { single_player = 0, options, quit, menu };
-  options_in_menu select_option;
-  options_in_menu run;
-  std::array<sf::Text, 3> menu_options;
-  void Display();
-  void Game();
-  void Options();
-  P_Game single;
-  std::ifstream file;
+	sf::Font font;
+	sf::RenderWindow* game_window;
+	bool* isKeyPressed;
+	enum options_in_menu{single_player=0,options,quit,menu};
+	options_in_menu select_option;
+	options_in_menu run;
+	std::array<sf::Text,3> menu_options;
+	void Display();
+	void Game();
+	void Options();
+	P_Game single;
+	bool start_clock;
   map_element_value value;
-  bool start_clock;
 
 public:
   Menu(sf::RenderWindow *window, bool *keyPressed);

@@ -15,54 +15,114 @@ void P_Game::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(textTime, states);
 }
 
-P_Game::P_Game() {
+
+
+P_Game::P_Game()  {
+  
     player.setRadius(10);
     player.setFillColor(sf::Color::Red);
     player.setPosition(0, 15);
     meta_texture.loadFromFile("x.png");
     meta.setTexture(meta_texture);
+    speed = 0.2;
+		map_file.open("libraries/levels_info");
+		actual_level = 0;
+		map_file >> number_of_levels;
+  
+		for(int i = 0; i < number_of_levels;i++){
+			std::string level_file;
+			map_file >> level_file;
+			levels.push_back("libraries/"+level_file);
+		}
+  
+		map_file.close();
+
 }
 
-void P_Game::resetClock() { 
-    clock.restart();
+void P_Game::refresh(){
+  
+  sf::CircleShape test = player;
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+		test.move(speed,0);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+		test.move(0,speed);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+		test.move(-speed,0);
+	}
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+		test.move(0,-speed);
+	}
+  
+  bool off_the_screen = ( test.getPosition().x > 0 
+                         && test.getPosition().y > 0 
+                         && test.getPosition().x < game_window->getSize().x - test.getGlobalBounds().width 
+                         && test.getPosition().y < game_window->getSize().y - test.getGlobalBounds().height);
+
+  if (off_the_screen) {
+    
+    bool collision = false;
+    for (std::size_t i = 0; i < game_map.size() && !collision; i++)
+      collision = game_map[i].getGlobalBounds().intersects(test.getGlobalBounds());
+
+    if (collision == false) {
+      player = test;
+      }
+    }
+
+  sf::Rect<float> meta_test = meta.getGlobalBounds();
+	meta_test.left+= player.getGlobalBounds().width;
+  
+	if(player.getGlobalBounds().intersects(meta_test)){
+		resetClock(false);
+		actual_level = (actual_level == number_of_levels) ? actual_level = 0 :actual_level+1;
+		readMapFromFile(levels[actual_level]);
+	}
+
 }
 
-void P_Game::refresh() {
-    sf::CircleShape test = player;
+  
+void P_Game::resetClock(bool rest_levels){
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        test.move(0.1, 0);
-    }
+		clock.restart();
+		player.setPosition(0,15);
+		if(rest_levels == true)
+			actual_level = 0;
+  
+}
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        test.move(0, 0.1);
-    }
+void P_Game::readMapFromFile(std::string file){
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        test.move(-0.1, 0);
-    }
+	game_map.clear();
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        test.move(0, -0.1);
-    }
+ 	map_file.open(file);
+	int lines = 0;
+	map_file >> lines;
 
-    bool off_the_screen =
-        (test.getPosition().x > 0 && test.getPosition().y > 0 &&
-        test.getPosition().x <
-            game_window->getSize().x - test.getGlobalBounds().width &&
-        test.getPosition().y <
-            game_window->getSize().y - test.getGlobalBounds().height);
+	for (int i = 0;i<lines;i++){
+		map_file >> value.x;
+		map_file >> value.y;
+		map_file >> value.w;
+		map_file >> value.h;
+		map_file >> value.r;
 
-    if (off_the_screen) {
-        bool collision = false;
+		addMapElement(value);
 
-        for (std::size_t i = 0; i < game_map.size() && !collision; i++)
-            collision = game_map[i].getGlobalBounds().intersects(test.getGlobalBounds());
+	}
 
-        if (collision == false) {
-            player = test;
-        }
-    }
+	int x = 0;
+	int y = 0;
+
+	map_file >> x;
+	map_file >> y;
+
+	setUpMapEnd(x,y);
+
+	map_file.close();
+  
 }
 
 void P_Game::setUpMap(int i, int x, int y, int w, int h, int r) {

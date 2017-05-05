@@ -70,65 +70,41 @@ void Menu::Display() {
 void Menu::Game() {
     if (start_clock) {
         start_clock = false;
+        single.readMapFromFile("libraries/level_1");
+        single.resetClock(true);
         single.resetClock();
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && *isKeyPressed) {
         run = menu;
     }
-
     single.refresh();
+  
 }
 
-Menu::Menu(sf::RenderWindow *window, bool *keyPressed) {
-    font.loadFromFile("font/Oxygen-Light.ttf");
-    single.setFont(&font);
 
-    for (int i = 0; i < 3; i++) {
-        menu_options[i].setFont(font);
-    }
+Menu::Menu(sf::RenderWindow* window,bool* keyPressed){
 
-    game_window = window;
-    menu_options[0].setString("Start Game");
-    menu_options[0].setPosition(
-        (game_window->getSize().x - menu_options[0].getGlobalBounds().width) / 2,
-        game_window->getSize().y / 2);
-    menu_options[1].setString("Options");
-    menu_options[1].setPosition(
-        (game_window->getSize().x - menu_options[1].getGlobalBounds().width) / 2,
-        menu_options[0].getPosition().y +
-            menu_options[0].getGlobalBounds().height + 10);
-    menu_options[2].setString("Quit");
-    menu_options[2].setPosition(
-        (game_window->getSize().x - menu_options[2].getGlobalBounds().width) / 2,
-        menu_options[1].getPosition().y +
-            menu_options[1].getGlobalBounds().height + 10);
+	font.loadFromFile("font/Oxygen-Light.ttf");
+	single.setFont(&font);
 
-    select_option = single_player;
-    isKeyPressed = keyPressed;
-    run = menu;
-    file.open("libraries/abc");
-    int lines = 0;
-    file >> lines;
+	for(int i = 0;i<3;i++)
+		menu_options[i].setFont(font);
 
-    for (int i = 0; i < lines; i++) {
-        file >> value.x;
-        file >> value.y;
-        file >> value.w;
-        file >> value.h;
-        file >> value.r;
+	game_window = window;
+	menu_options[0].setString("Start Game");
+	menu_options[0].setPosition((game_window->getSize().x-menu_options[0].getGlobalBounds().width)/2,game_window->getSize().y/2);
+	menu_options[1].setString("Options");
+	menu_options[1].setPosition((game_window->getSize().x-menu_options[1].getGlobalBounds().width)/2,menu_options[0].getPosition().y+menu_options[0].getGlobalBounds().height+10);
+	menu_options[2].setString("Quit");
+	menu_options[2].setPosition((game_window->getSize().x-menu_options[2].getGlobalBounds().width)/2,menu_options[1].getPosition().y+menu_options[1].getGlobalBounds().height+10);
 
-        single.addMapElement(value);
-    }
+	select_option = single_player;
+	isKeyPressed = keyPressed;
+	run = menu;
 
-    int x = 0;
-    int y = 0;
+	single.setRnderWindow(game_window);
 
-    file >> x;
-    file >> y;
+	start_clock = false;
 
-    single.setUpMapEnd(x, y);
-    single.setRnderWindow(game_window);
-
-    start_clock = false;
 }

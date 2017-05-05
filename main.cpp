@@ -1,10 +1,7 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include "libraries/game.h"
 #include "libraries/menu.h"
 
 int main() {
-    sf::RenderWindow game_window(sf::VideoMode(500,500),"L_S");
+    sf::RenderWindow game_window(sf::VideoMode(500,500),"L_S",sf::Style::Titlebar | sf::Style::Close);
 
     bool isKeyPressed = false;
     Menu menu(&game_window,&isKeyPressed);
@@ -30,4 +27,7 @@ int main() {
         game_window.draw(menu);
         game_window.display();
     }
+
+	return 0;
+
 }
