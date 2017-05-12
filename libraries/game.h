@@ -40,10 +40,10 @@ public:
     void setUpMap(int i, int x, int y, int w, int h, int r);
     void refresh();
     void setUpMapEnd(int x, int y);
-    void resetClock(bool rest_levels);
+    void resetClock(bool reset_levels);
     void setFont(sf::Font *f) { font = f; };
     void readMapFromFile(std::string file);
-    void nextLeve();  
+    void nextLeve();
 
 };
 

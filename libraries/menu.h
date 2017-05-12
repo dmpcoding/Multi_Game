@@ -1,11 +1,8 @@
 #ifndef Menu_Class
 #define Menu_Class
 
-#include <iostream>
 #include <array>
-#include <fstream>
-#include "game.h"
-#include <SFML/Graphics.hpp>
+#include "game_selector.h"
 
 class Menu : public sf::Drawable, public sf::Transformable {
 private:
@@ -19,9 +16,7 @@ private:
 	void Display();
 	void Game();
 	void Options();
-	P_Game single;
-	bool start_clock;
-  map_element_value value;
+	GameSelector selector;
 
 public:
   Menu(sf::RenderWindow *window, bool *keyPressed);

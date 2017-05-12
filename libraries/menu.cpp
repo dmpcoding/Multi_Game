@@ -8,7 +8,7 @@ void Menu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     }
 
     if (run == single_player) {
-        target.draw(single);
+        target.draw(selector, states);
     }
 }
 
@@ -45,20 +45,20 @@ void Menu::Display() {
         select_option = (options_in_menu)i;
     }
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < menu_options.size(); i++) {
         menu_options[i].setFillColor(sf::Color::White);
     }
 
     menu_options[(int)select_option].setFillColor(sf::Color::Cyan);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && *isKeyPressed) {
+      *isKeyPressed = false;
         switch (select_option) {
         case quit:
             game_window->close();
             break;
         case single_player:
             run = single_player;
-            start_clock = true;
             break;
         case options:
             run = options;
@@ -68,31 +68,27 @@ void Menu::Display() {
 }
 
 void Menu::Game() {
-    if (start_clock) {
-        start_clock = false;
-        single.readMapFromFile("libraries/level_1");
-        single.resetClock(true);
-        single.resetClock();
-    }
+
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && *isKeyPressed) {
         run = menu;
+        selector.reset();
     }
-    single.refresh();
-  
+    selector.runGame();
+
 }
 
 
 Menu::Menu(sf::RenderWindow* window,bool* keyPressed){
 
 	font.loadFromFile("font/Oxygen-Light.ttf");
-	single.setFont(&font);
+	selector.setFont(&font);
 
 	for(int i = 0;i<3;i++)
 		menu_options[i].setFont(font);
 
 	game_window = window;
-	menu_options[0].setString("Start Game");
+	menu_options[0].setString("Select Game");
 	menu_options[0].setPosition((game_window->getSize().x-menu_options[0].getGlobalBounds().width)/2,game_window->getSize().y/2);
 	menu_options[1].setString("Options");
 	menu_options[1].setPosition((game_window->getSize().x-menu_options[1].getGlobalBounds().width)/2,menu_options[0].getPosition().y+menu_options[0].getGlobalBounds().height+10);
@@ -103,8 +99,8 @@ Menu::Menu(sf::RenderWindow* window,bool* keyPressed){
 	isKeyPressed = keyPressed;
 	run = menu;
 
-	single.setRnderWindow(game_window);
+	selector.setRnderWindow(game_window);
+  selector.setKeyPressed(isKeyPressed);
 
-	start_clock = false;
 
 }

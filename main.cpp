@@ -6,6 +6,7 @@ int main() {
     bool isKeyPressed = false;
     Menu menu(&game_window,&isKeyPressed);
 
+
     while(game_window.isOpen()) {
         isKeyPressed = false;
 
