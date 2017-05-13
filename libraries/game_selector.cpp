@@ -4,14 +4,25 @@ void GameSelector::runLabyrinth(){
 
   if (start_clock) {
       start_clock = false;
-      single.readMapFromFile("libraries/level_1");
-      single.resetClock(true);
+      labirynth.readMapFromFile("libraries/level_1");
+      labirynth.resetClock(true);
   }
 
-  single.refresh();
+  labirynth.refresh();
 
 
 }
+
+void GameSelector::runPong(){
+
+if (start_clock) {
+      start_clock = false;
+      pong.resetClock();
+  }
+
+  pong.refresh();
+
+};
 
 void GameSelector::runGame(){
 
@@ -23,6 +34,7 @@ void GameSelector::runGame(){
       runLabyrinth();
       break;
     case Pong:
+      runPong();
       break;
   }
 
@@ -65,14 +77,17 @@ if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && *isKeyPressed) {
 
 void GameSelector::setFont(sf::Font *f){
   font = f;
-  single.setFont(font);
+  labirynth.setFont(font);
+  pong.setFont(font);
+
   for(int i = 0;i<options.size();i++)
     options[i].setFont(*font);
 };
 
 void GameSelector::setRnderWindow(sf::RenderWindow *window){
   game_window = window;
-  single.setRnderWindow(window);
+  labirynth.setRnderWindow(window);
+  pong.setRnderWindow(window);
   options[0].setPosition((game_window->getSize().x-options[0].getGlobalBounds().width)/2,game_window->getSize().y/2);
   options[1].setPosition((game_window->getSize().x-options[1].getGlobalBounds().width)/2,options[0].getPosition().y+options[0].getGlobalBounds().height+10);
 }
@@ -83,7 +98,7 @@ GameSelector::GameSelector(){
   which_game = None;
 
   options[0].setString("Labirynth");
-  options[1].setString("Pong");
+  options[1].setString("Pong (in coding)");
   game_to_run = Labirynth;
 
 }
@@ -96,9 +111,10 @@ void GameSelector::draw(sf::RenderTarget &target, sf::RenderStates states) const
         target.draw(x,states);
       break;
     case Labirynth:
-      target.draw(single,states);
+      target.draw(labirynth,states);
       break;
     case Pong:
+      target.draw(pong,states);
       break;
   };
 

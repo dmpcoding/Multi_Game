@@ -2,6 +2,7 @@
 #define Game_Selector
 
 #include "game.h"
+#include "pong.h"
 
 class GameSelector: public sf::Drawable, public sf::Transformable{
 
@@ -10,12 +11,14 @@ enum Games{Labirynth = 0,Pong,None};
 private:
   sf::Font *font;
   bool *isKeyPressed;
-  P_Game single;
+  P_Game labirynth;
+  G_Pong pong;
   bool start_clock;
   sf::RenderWindow *game_window;
   Games which_game;
   Games game_to_run;
   void runLabyrinth();
+  void runPong();
   void Menu();
 
 public:
